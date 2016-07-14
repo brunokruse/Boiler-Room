@@ -1,6 +1,8 @@
 # Radiator-Labs
 Radiator Labs testing suite and firmware.
 
+[![Foo](http://www.google.com.au/images/nav_logo7.png)](http://google.com.au/)
+
 <br>
 
 ###Staging Environment
