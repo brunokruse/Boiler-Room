@@ -1,7 +1,7 @@
 # Radiator-Labs
 Radiator Labs testing suite and firmware.
 
-[![Foo](http://www.google.com.au/images/nav_logo7.png)](http://google.com.au/)
+[![topview](https://raw.githubusercontent.com/brunokruse/Radiator-Labs/master/images/TopView_R1.JPG?token=AADEjzuzgyAq9yxAXoS1NBBdKINDmfmcks5XkHGVwA%3D%3D)](https://raw.githubusercontent.com/brunokruse/Radiator-Labs/master/images/TopView_R1.JPG?token=AADEjzuzgyAq9yxAXoS1NBBdKINDmfmcks5XkHGVwA%3D%3D)
 
 <br>
 
