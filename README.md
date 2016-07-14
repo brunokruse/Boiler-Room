@@ -23,4 +23,7 @@ eJPyyB3pQaHzLEqbMPXlum3wMO1A
 ###Private Key
 2LErr9V0m5hml4LbqyQ7FQwLNOYg
 
-### Example
+### Posting Example
+http://ec2-54-218-89-249.us-west-2.compute.amazonaws.com:8080/input/[publicKey]?private_key=[privateKey]&a1=[value]&a2=[value]&d1=[value]&fan=[value]&t1=[value]&t2=[value]&t3=[value]&t4=[value]&t5=[value]&t6=[value]&t7=[value]&t8=[value]
+
+
