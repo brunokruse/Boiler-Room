@@ -1,7 +1,7 @@
 # Radiator-Labs
 Radiator Labs testing suite and firmware.
 
-[![topview](https://raw.githubusercontent.com/brunokruse/Radiator-Labs/master/images/TopView_R1.JPG?token=AADEjzuzgyAq9yxAXoS1NBBdKINDmfmcks5XkHGVwA%3D%3D)](https://raw.githubusercontent.com/brunokruse/Radiator-Labs/master/images/TopView_R1.JPG?token=AADEjzuzgyAq9yxAXoS1NBBdKINDmfmcks5XkHGVwA%3D%3D)
+[![topview](https://raw.githubusercontent.com/brunokruse/Boiler-Room/master/images/TopView_R1.JPG?token=AADEj-or842q4mu0FhpkUp8zgZ8swK9jks5XlmupwA%3D%3D)](https://raw.githubusercontent.com/brunokruse/Boiler-Room/master/images/TopView_R1.JPG?token=AADEj-or842q4mu0FhpkUp8zgZ8swK9jks5XlmupwA%3D%3D)
 prototype shield revision 1
 
 ###Gear
