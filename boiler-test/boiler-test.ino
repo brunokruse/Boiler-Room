@@ -2,18 +2,24 @@
 	Boiler Room testing software
 */
 
+/*
+Posting Data to server.
+Sending command: curl --header "Phant-Private-Key: 2LErr9V0m5hml4LbqyQ7FQwLNOYg" --data "test=sup" http://ec2-54-218-89-249.us-west-2.compute.amazonaws.com:8080/input/eJPyyB3pQaHzLEqbMPXlum3wMO1A
+Response: 1 success
+*/
+
 #include <FileIO.h>
 #include <Process.h>
 #include <OneWire.h>
 #include <DallasTemperature.h> // DS18B20
 
 // phant setup
-//http://ec2-54-218-89-249.us-west-2.compute.amazonaws.com:8080/streams/xp9WjxBl1pUlOjVMreJoUMdpxOM
-// deleteKey = "7rN8yn0JArixdw7mB2R4Ua0GeLa";
+// http://ec2-54-218-89-249.us-west-2.compute.amazonaws.com:8080/streams/6bBPy8Nj9WSq2e3AX9oEiqbwq2A
+// deleteKey = "VryE6akWvntzo2QqDxgETdrOdvo";
 
 String phantURL = "http://ec2-54-218-89-249.us-west-2.compute.amazonaws.com:8080/input/"; // AWS 8080
-String publicKey = "xp9WjxBl1pUlOjVMreJoUMdpxOM"; // public
-String privateKey = "gxqMzyZ9WxUmWv5j8Re4ieQ4l3e"; // private
+String publicKey = "eKPG0DzqdYszLE304ELrT1qKkvp"; // public
+String privateKey = "2nEWvdgwe7hml4eda4lnCYXVEZd"; // private
 
 const int NUM_FIELDS = 8;
 String fieldName[NUM_FIELDS] = { "t1", "t2", "t3", "t4", "t5", "t6", "t7", "t8" };
@@ -41,22 +47,17 @@ void setup() {
   
   // LED Debugging
   pinMode(ledPin, OUTPUT);
-  
   ledOn();
 
   Bridge.begin();
-
-  Serial.begin(9600);
-
+  Serial.begin(115200);
   while (!Serial); // arduino yun hack
 
-  initSensors(); // initialize the DS18B20 sensors
-
   FileSystem.begin(); // write to SD card YO
-
   while (!SerialUSB);
-  
   SerialUSB.println("Boiler room datalogger\n");
+  
+  initSensors(); // initialize the DS18B20 sensors
 
   ledOff();
 }
@@ -86,10 +87,10 @@ void loop() {
   Serial.println("Grabbing data from sensors.");
   getDataFromSensors();
 
-  Serial.println("Writing most recent data to SD");
-  writeToSD();
+  //Serial.println("Writing most recent data to SD");
+  //writeToSD();
 
-  //Serial.println("Posting Data to server.");
+  Serial.println("Posting Data to server.");
   postData();
 
   // we don't want to do it too often
@@ -106,7 +107,8 @@ void ledOff() {
 }
 
 void ledBlink() {
-  // 3 blinks
+  
+  // 2 blinks
   digitalWrite(ledPin, HIGH);
   delay(100);
   digitalWrite(ledPin, LOW);
@@ -119,24 +121,19 @@ void ledBlink() {
 
 void getDataFromSensors() {
 
+
+  	//DUMMY DATA
+
+    fieldData[0] = "90.0";
+    fieldData[1] = "90.0";
+    fieldData[2] = "90.0";
+    fieldData[3] = "90.0";
+    fieldData[4] = "90.0";
+    fieldData[5] = "90.0";
+    fieldData[6] = "90.0";
+    fieldData[7] = "90.0";
+    
   /*
-
-  	DUMMY DATA
-
-    fieldData[0] = String("90");
-    fieldData[1] = String("90");
-    fieldData[2] = String("90");
-    fieldData[3] = String("90");
-    fieldData[4] = String("90");
-    fieldData[5] = String("90");
-    fieldData[6] = String("90");
-    fieldData[7] = String("90");
-    fieldData[8] = String("90");
-
-
-  */
-
-
   Serial.println();
   Serial.print("Number of Devices found on bus = ");
   Serial.println(sensors.getDeviceCount());
@@ -145,6 +142,7 @@ void getDataFromSensors() {
 
   // Command all devices on bus to read temperature
   sensors.requestTemperatures();
+
 
   // Data from sensors
   fieldData[0] = DallasTemperature::toFahrenheit(sensors.getTempC(temp1));
@@ -155,7 +153,7 @@ void getDataFromSensors() {
   fieldData[5] = DallasTemperature::toFahrenheit(sensors.getTempC(temp6));
   fieldData[6] = DallasTemperature::toFahrenheit(sensors.getTempC(temp7));
   fieldData[7] = DallasTemperature::toFahrenheit(sensors.getTempC(temp8));
-
+  */
 }
 
 
@@ -184,6 +182,7 @@ String getTimeStamp() {
 }
 
 void postData() {
+  
   Process phant; // Used to send command to Shell, and view response
   String curlCmd; // Where we'll put our curl command
   String curlData[NUM_FIELDS]; // temp variables to store curl data
@@ -192,7 +191,7 @@ void postData() {
   // Should look like: --data "fieldName=fieldData"
   for (int i = 0; i < NUM_FIELDS; i++)
   {
-    curlData[i] = "--data \"" + fieldName[i] + "=" + String(fieldData[i]) + "\" ";
+    curlData[i] = "--data \"" + fieldName[i] + "=" + fieldData[i] + "\" ";
   }
 
   // Construct the curl command:
@@ -201,24 +200,26 @@ void postData() {
   curlCmd += "\"Phant-Private-Key: "; // Tells our server the key is coming
   curlCmd += privateKey;
   curlCmd += "\" "; // Enclose the entire header with quotes.
-  for (int i = 0; i < NUM_FIELDS; i++)
+  
+  for (int i=0; i<NUM_FIELDS; i++)
     curlCmd += curlData[i]; // Add our data fields to the command
   curlCmd += phantURL + publicKey; // Add the server URL, including public key
-
+  
   // Send the curl command:
   Serial.print("Sending command: ");
   Serial.println(curlCmd); // Print command for debug
   phant.runShellCommand(curlCmd); // Send command through Shell
 
   // Read out the response:
-  Serial.print("Response: ");
+  Serial.println("Response: ");
   
   // Use the phant process to read in any response from Linux:
-  while (phant.available())
-  {
+  while (phant.available()) {
     char c = phant.read();
     Serial.write(c);
   }
+
+  delay(5000);
 }
 
 void writeToSD() {
